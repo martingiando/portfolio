@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { SITE_CONFIG, SOCIAL_LINKS } from "@/lib/constants";
 import { AnimatedSection } from "@/components/shared/animated-section";
+import { textLink } from "@/components/shared/page-shell";
 import { SectionHeading } from "@/components/shared/section-heading";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
@@ -21,6 +23,7 @@ export function Contact() {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       message: formData.get("message") as string,
+      website: formData.get("website") as string,
     };
 
     try {
@@ -31,7 +34,7 @@ export function Contact() {
       });
 
       if (!res.ok) {
-        const body = await res.json();
+        const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "Failed to send message.");
       }
 
@@ -58,9 +61,40 @@ export function Contact() {
           {/* Left: CTA text */}
           <AnimatedSection>
             <p className="text-muted-foreground text-lg leading-relaxed max-w-md mb-8">
-              Have a project idea, a question, or just want to say hi? Drop me a
-              message and I&apos;ll get back to you as soon as I can.
+              Have a role, a project idea or a question? Send me a message, or
+              write to me directly.
             </p>
+            <ul className="mb-8 flex flex-col items-start">
+              <li>
+                <a
+                  href={`mailto:${SITE_CONFIG.email}`}
+                  className={`${textLink} inline-block py-2.5`}
+                >
+                  {SITE_CONFIG.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SITE_CONFIG.cv}
+                  download
+                  className={`${textLink} inline-block py-2.5`}
+                >
+                  Download CV (PDF)
+                </a>
+              </li>
+              {SOCIAL_LINKS.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${textLink} inline-block py-2.5`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
             <div className="flex items-center gap-4">
               <span className="h-px w-12 bg-accent" aria-hidden="true" />
               <span className="font-mono text-xs uppercase tracking-widest text-accent">
@@ -72,7 +106,12 @@ export function Contact() {
           {/* Right: Form */}
           <AnimatedSection delay={0.15}>
             {status === "success" ? (
-              <div className="border border-foreground shadow-brutalist bg-card p-8 md:p-10 text-center">
+              <div
+                role="status"
+                tabIndex={-1}
+                ref={(el) => el?.focus()}
+                className="border border-foreground shadow-brutalist bg-card p-8 md:p-10 text-center"
+              >
                 <p className="font-display text-2xl font-bold uppercase tracking-tight mb-2">
                   Message Sent
                 </p>
@@ -80,8 +119,9 @@ export function Contact() {
                   Thanks for reaching out! I&apos;ll get back to you soon.
                 </p>
                 <button
+                  type="button"
                   onClick={() => setStatus("idle")}
-                  className="mt-6 font-mono text-sm text-accent uppercase tracking-wider hover:underline cursor-pointer"
+                  className="mt-6 py-3 font-mono text-sm text-accent uppercase tracking-wider hover:underline cursor-pointer"
                 >
                   Send another message
                 </button>
@@ -103,8 +143,10 @@ export function Contact() {
                     id="name"
                     name="name"
                     type="text"
+                    autoComplete="name"
+                    maxLength={100}
                     required
-                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-base focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="Your name"
                   />
                 </div>
@@ -121,8 +163,10 @@ export function Contact() {
                     id="email"
                     name="email"
                     type="email"
+                    autoComplete="email"
+                    maxLength={254}
                     required
-                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-base focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -139,15 +183,28 @@ export function Contact() {
                     id="message"
                     name="message"
                     required
+                    maxLength={5000}
                     rows={5}
-                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent"
-                    placeholder="Tell me about your project..."
+                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-base resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+                    placeholder="Tell me about the role or project"
+                  />
+                </div>
+
+                {/* Honeypot: people never see it, bots fill it in */}
+                <div className="hidden" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
                   />
                 </div>
 
                 {/* Error message */}
                 {status === "error" && (
-                  <p className="font-mono text-xs text-red-600" role="alert">
+                  <p className="font-mono text-sm text-destructive" role="alert">
                     {errorMsg}
                   </p>
                 )}

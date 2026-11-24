@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
@@ -9,6 +10,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const lenis = useLenis();
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -30,54 +32,81 @@ export function Navbar() {
     };
   }, [mobileOpen, lenis]);
 
+  // While the menu covers the page, keep keyboard and screen readers out of it
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const covered = document.querySelectorAll<HTMLElement>("main, footer");
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const close = () => setMobileOpen(false);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      close();
+      toggleRef.current?.focus();
+    };
+    covered.forEach((el) => (el.inert = true));
+    window.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", close);
+    return () => {
+      covered.forEach((el) => (el.inert = false));
+      window.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", close);
+    };
+  }, [mobileOpen]);
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          scrolled
+        className={`fixed top-0 left-0 w-full z-50 px-6 transition-all duration-300 ${
+          scrolled || mobileOpen
             ? "backdrop-blur-md bg-background/80 border-b border-border"
             : "bg-transparent"
         }`}
       >
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <nav
+          aria-label="Main"
+          className="mx-auto flex h-16 max-w-7xl items-center justify-between"
+        >
           {/* Logo */}
-          <a
-            href="#"
-            className="font-display text-lg font-bold uppercase tracking-tight"
+          <Link
+            href="/"
+            className="py-2.5 font-display text-lg font-bold uppercase tracking-tight"
           >
             {SITE_CONFIG.name.split(" ")[0]}
             <span className="text-accent">.</span>
-          </a>
+          </Link>
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
-                  className="font-mono text-sm uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                  className="py-3 font-mono text-sm uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
 
           {/* CTA + Mobile toggle */}
           <div className="flex items-center gap-4">
-            <a
-              href="#contact"
+            <Link
+              href="/#contact"
               className="hidden md:inline-flex items-center justify-center rounded-none bg-accent px-6 py-2.5 font-mono text-sm font-medium uppercase tracking-wider text-white shadow-brutalist-sm transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
             >
               Let&apos;s Talk
-            </a>
+            </Link>
 
             {/* Hamburger */}
             <button
+              ref={toggleRef}
+              type="button"
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden flex flex-col gap-1.5 p-2"
+              className="md:hidden -mr-2.5 flex size-11 flex-col items-center justify-center gap-1.5"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
             >
               <span
                 className={`block h-0.5 w-6 bg-foreground transition-transform ${
@@ -102,31 +131,33 @@ export function Navbar() {
       {/* Mobile overlay — outside header to avoid backdrop-filter containing block */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
+          <motion.nav
+            id="mobile-menu"
+            aria-label="Mobile"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-[60px] left-0 right-0 bottom-0 bg-background z-40 flex flex-col items-center justify-center gap-8"
+            className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-background z-40 flex flex-col items-center justify-center gap-8"
           >
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="font-display text-3xl font-bold uppercase tracking-tight"
+                className="py-1 font-display text-3xl font-bold uppercase tracking-tight"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <a
-              href="#contact"
+            <Link
+              href="/#contact"
               onClick={() => setMobileOpen(false)}
               className="mt-4 inline-flex items-center justify-center bg-accent px-8 py-3 font-mono text-sm font-medium uppercase tracking-wider text-white shadow-brutalist-sm"
             >
               Let&apos;s Talk
-            </a>
-          </motion.div>
+            </Link>
+          </motion.nav>
         )}
       </AnimatePresence>
     </>

@@ -19,15 +19,14 @@ export function Testimonials() {
           title="What People Say"
           count={`0${testimonials.length}`}
         />
+        {/* Splide keeps the list hidden until it mounts */}
+        <noscript>
+          <style>{`.splide{visibility:visible!important}.splide__list{flex-direction:column;gap:1.5rem}`}</style>
+        </noscript>
         <Splide
           options={{
-            type: "loop",
             perPage: 3,
             gap: "1.5rem",
-            autoplay: true,
-            interval: 5000,
-            pauseOnHover: true,
-            pauseOnFocus: true,
             pagination: true,
             arrows: false,
             breakpoints: {

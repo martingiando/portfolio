@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/hero";
 import { SelectedWorks } from "@/components/sections/selected-works";
@@ -30,6 +31,8 @@ const Contact = dynamic(
   () => import("@/components/sections/contact").then((mod) => mod.Contact),
   { ssr: true }
 );
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
   return (

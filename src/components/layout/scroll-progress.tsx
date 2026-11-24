@@ -1,9 +1,8 @@
 "use client";
 
-import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 export function ScrollProgress() {
-  const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -11,11 +10,10 @@ export function ScrollProgress() {
     restDelta: 0.001,
   });
 
-  if (prefersReducedMotion) return null;
-
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] bg-accent z-[60] origin-left"
+      aria-hidden="true"
+      className="motion-reduce:hidden fixed top-0 left-0 right-0 h-[3px] bg-accent z-[60] origin-left"
       style={{ scaleX }}
     />
   );

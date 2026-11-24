@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ABOUT, SITE_CONFIG } from "@/lib/constants";
+import { textLink } from "@/components/shared/page-shell";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
 
@@ -45,6 +47,14 @@ export function About() {
                 </span>
                 <p className="mt-6 text-muted-foreground leading-relaxed">
                   {ABOUT.bio}
+                </p>
+                <p className="mt-4 flex flex-wrap gap-x-6">
+                  <Link href="/about" className={`${textLink} py-2.5`}>
+                    More about me
+                  </Link>
+                  <Link href="/hire" className={`${textLink} py-2.5`}>
+                    Working with me
+                  </Link>
                 </p>
               </div>
 

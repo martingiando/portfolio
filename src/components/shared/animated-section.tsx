@@ -1,42 +1,27 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
   delay?: number;
-  direction?: "up" | "down" | "left" | "right";
 }
-
-const directionOffset = {
-  up: { x: 0, y: 50 },
-  down: { x: 0, y: -50 },
-  left: { x: 50, y: 0 },
-  right: { x: -50, y: 0 },
-};
 
 export function AnimatedSection({
   children,
-  className,
+  className = "",
   delay = 0,
-  direction = "up",
 }: AnimatedSectionProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const offset = directionOffset[direction];
-
-  if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
   return (
+    // Transform only: the content is visible before (and without) JS
     <motion.div
-      initial={{ opacity: 0, x: offset.x, y: offset.y }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      initial={{ y: 24 }}
+      whileInView={{ y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] }}
-      className={className}
+      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={`motion-reduce:transform-none! ${className}`}
     >
       {children}
     </motion.div>

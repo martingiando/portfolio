@@ -13,7 +13,7 @@ export const stack: StackCategory[] = [
   {
     id: "02",
     name: "Frontend",
-    items: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "SCSS", "Angular", "Vue", "Astro"],
+    items: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "SCSS", "Angular", "Astro"],
   },
   {
     id: "03",
@@ -28,7 +28,7 @@ export const stack: StackCategory[] = [
   {
     id: "05",
     name: "Cloud & DevOps",
-    items: ["AWS", "Docker", "Terraform", "CI/CD"],
+    items: ["AWS", "Docker", "CI/CD"],
   },
   {
     id: "06",

@@ -15,17 +15,17 @@ A personal portfolio built with a bold, brutalist aesthetic. Showcases projects,
 | **Styling** | Tailwind CSS 4, tw-animate-css |
 | **UI** | shadcn, Framer Motion |
 | **Features** | Lenis (smooth scroll), Splide (carousel), Resend (contact form) |
-| **Utils** | clsx, tailwind-merge |
 
 ---
 
 ## Features
 
-- **Projects** — Full-stack work with links and tech tags
+- **Projects** — Full-stack work with links, tech tags and case studies
 - **Experience** — Timeline of roles and responsibilities
 - **Stack** — Grouped tech overview
 - **Testimonials** — Colleague quotes
-- **Contact** — Form powered by Resend
+- **Contact** — Form powered by Resend, email and downloadable CV
+- **Pages** — About, Hire me and a Spanish profile, with structured data
 - **Design** — Brutalist layout, scroll progress bar, smooth scrolling
 
 ---

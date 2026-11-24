@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { SITE_CONFIG, SITE_URL } from "@/lib/constants";
 
-// Simple in-memory rate limiter (resets on deploy/restart)
+// shortcut: in-memory, so each serverless instance counts on its own; move to a
+// shared store or a Vercel Firewall rule if spam gets through
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT = 3; // max requests
 const RATE_WINDOW = 60 * 60 * 1000; // per hour
@@ -23,13 +25,13 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-function sanitize(input: string): string {
+function escapeHtml(input: string): string {
   return input
+    .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .trim();
+    .replace(/'/g, "&#x27;");
 }
 
 export async function POST(request: Request) {
@@ -46,9 +48,12 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const name = sanitize(String(body.name || ""));
-    const email = sanitize(String(body.email || ""));
-    const message = sanitize(String(body.message || ""));
+    const name = String(body.name || "").replace(/\s+/g, " ").trim();
+    const email = String(body.email || "").trim();
+    const message = String(body.message || "").trim();
+
+    // Honeypot: answer as if it worked so the bot does not retry
+    if (body.website) return NextResponse.json({ success: true });
 
     if (!name || !email || !message) {
       return NextResponse.json(
@@ -74,16 +79,21 @@ export async function POST(request: Request) {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Email service not configured." },
+        { error: "Your message could not be sent. Please email me directly." },
         { status: 503 }
       );
     }
 
     const resend = new Resend(apiKey);
+    const safe = {
+      name: escapeHtml(name),
+      email: escapeHtml(email),
+      message: escapeHtml(message),
+    };
 
     const { error: sendError } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: "martingiando@gmail.com",
+      to: SITE_CONFIG.email,
       replyTo: email,
       subject: `New message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
@@ -118,19 +128,19 @@ export async function POST(request: Request) {
                 <tr>
                   <td style="padding:24px 32px 0;">
                     <p style="margin:0 0 4px;font-size:11px;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:2px;color:#6B7280;">Name</p>
-                    <p style="margin:0;font-size:16px;color:#0A0E17;font-weight:600;">${name}</p>
+                    <p style="margin:0;font-size:16px;color:#0A0E17;font-weight:600;">${safe.name}</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:20px 32px 0;">
                     <p style="margin:0 0 4px;font-size:11px;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:2px;color:#6B7280;">Email</p>
-                    <p style="margin:0;font-size:16px;"><a href="mailto:${email}" style="color:#0055FF;text-decoration:none;">${email}</a></p>
+                    <p style="margin:0;font-size:16px;"><a href="mailto:${safe.email}" style="color:#0055FF;text-decoration:none;">${safe.email}</a></p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:20px 32px;">
                     <p style="margin:0 0 4px;font-size:11px;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:2px;color:#6B7280;">Message</p>
-                    <p style="margin:0;font-size:15px;color:#0A0E17;line-height:1.6;white-space:pre-wrap;">${message}</p>
+                    <p style="margin:0;font-size:15px;color:#0A0E17;line-height:1.6;white-space:pre-wrap;">${safe.message}</p>
                   </td>
                 </tr>
               </table>
@@ -138,7 +148,7 @@ export async function POST(request: Request) {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="padding:0 32px 28px;">
-                    <a href="mailto:${email}" style="display:inline-block;background-color:#0055FF;color:#ffffff;font-family:'Courier New',monospace;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;text-decoration:none;padding:12px 24px;box-shadow:4px 4px 0px 0px #0A0E17;">Reply</a>
+                    <a href="mailto:${safe.email}" style="display:inline-block;background-color:#0055FF;color:#ffffff;font-family:'Courier New',monospace;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;text-decoration:none;padding:12px 24px;box-shadow:4px 4px 0px 0px #0A0E17;">Reply</a>
                   </td>
                 </tr>
               </table>
@@ -147,7 +157,7 @@ export async function POST(request: Request) {
           <!-- Footer -->
           <tr>
             <td style="padding-top:24px;text-align:center;">
-              <p style="margin:0;font-size:11px;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:2px;color:#6B7280;">Sent from martingiando.com</p>
+              <p style="margin:0;font-size:11px;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:2px;color:#6B7280;">Sent from ${new URL(SITE_URL).host}</p>
             </td>
           </tr>
         </table>
@@ -161,7 +171,7 @@ export async function POST(request: Request) {
     if (sendError) {
       console.error("Resend error:", sendError);
       return NextResponse.json(
-        { error: sendError.message || "Failed to send email." },
+        { error: "Your message could not be sent. Please email me directly." },
         { status: 500 }
       );
     }

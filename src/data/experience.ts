@@ -3,32 +3,32 @@ import type { Experience } from "@/types";
 export const experiences: Experience[] = [
   {
     id: "01",
-    company: "The Flock",
-    title: "Software Engineer (Sr)",
-    period: "Jul 2022 — Present",
+    company: "Freelance",
+    title: "Independent Full Stack Developer",
+    period: "2025 — Present",
     description:
-      "Architected and implemented high-traffic features using Next.JS, TypeScript, and Node.js, ensuring seamless global state management and UI consistency. Optimized Express-based backend services to handle complex data processing, significantly improving system throughput and performance. Collaborated on the transition to modular frontend architectures, focusing on reusable components and TailwindCSS for styling.",
-    technologies: ["Next.js", "TypeScript", "Node.js", "Express", "Nest.js", "TailwindCSS", "SCSS", "Chakra-ui", "React Query", "Zustand", "React-hook-form"],
+      "Currently working on a freelance project. Also built Kiwo, a rental management dashboard, full stack.",
+    technologies: ["Next.js", "NestJS", "PostgreSQL", "Redis"],
     current: true,
   },
   {
     id: "02",
-    company: "Hack Academy",
-    title: "Frontend Mentor",
-    period: "Mar 2022 — Mar 2023",
+    company: "The Flock",
+    title: "Software Development Engineer (Sr)",
+    period: "Aug 2022 — Mar 2026",
     description:
-      "Mentored developers in modern technical standards, specifically focusing on Clean Code, Eslint/Prettier configurations, and Semantic HTML.",
-    technologies: ["React", "Vue", "JavaScript", "HTML", "CSS"],
+      "Worked on a leading travel company's web product from day one as the team grew to 15 people, and guided 3 teammates. Architected and built high-traffic features including search, booking, checkout and CRUD management with Next.js, TypeScript and Node.js. Developed Express backend services that handle complex data processing. Tested features with Jest and React Testing Library in an Agile/Scrum team.",
+    technologies: ["Next.js", "TypeScript", "Node.js", "Express", "Nest.js", "TailwindCSS", "SCSS", "Chakra-ui", "React Query", "Zustand", "React-hook-form"],
     current: false,
   },
   {
     id: "03",
-    company: "Hey! B Tech",
-    title: "Founder & Software Engineer",
-    period: "Mar 2022 — Sep 2022",
+    company: "Hack Academy",
+    title: "Frontend Mentor (evening classes)",
+    period: "Mar 2022 — Mar 2023",
     description:
-      "Managed the full development lifecycle, prioritizing robust backend logic and efficient data handling. Led projects centered on A/B testing and performance optimization, helping brands improve user experiences and unlock new growth opportunities through data-driven decisions.",
-    technologies: ["React", "Node.js", "A/B Testing", "Google Analytics", "Google Tag Manager"],
+      "Mentored developers in modern technical standards, specifically focusing on Clean Code, Eslint/Prettier configurations, and Semantic HTML.",
+    technologies: ["React", "JavaScript", "HTML", "CSS"],
     current: false,
   },
   {
@@ -54,11 +54,11 @@ export const experiences: Experience[] = [
   {
     id: "06",
     company: "SkillTech Group",
-    title: "Frontend Developer",
+    title: "Frontend Developer (Freelance)",
     period: "Feb 2021 — Feb 2022",
     description:
-      "Worked as a Frontend Developer, building web interfaces and reusable components using React for multiple client projects.",
-    technologies: ["React", "JavaScript", "HTML", "SCSS"],
+      "Built web interfaces and reusable React and Redux components for multiple client projects.",
+    technologies: ["React", "Redux", "JavaScript", "HTML", "SCSS"],
     current: false,
   },
 ];

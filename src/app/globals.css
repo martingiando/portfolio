@@ -33,19 +33,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -76,27 +63,39 @@
   --border: #D1D5DB;
   --input: #D1D5DB;
   --ring: #0055FF;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: #ffffff;
-  --sidebar-foreground: #0A0E17;
-  --sidebar-primary: #0A0E17;
-  --sidebar-primary-foreground: #F7F7F8;
-  --sidebar-accent: #E8E8EA;
-  --sidebar-accent-foreground: #0A0E17;
-  --sidebar-border: #D1D5DB;
-  --sidebar-ring: #0055FF;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  footer :focus-visible {
+    outline-color: white;
+  }
+  /* Long words wrap instead of being cut off when text is enlarged */
+  h1,
+  h2,
+  h3,
+  dd {
+    overflow-wrap: anywhere;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--accent);
+    color: white;
+  }
+  ::placeholder {
+    color: var(--muted-foreground);
+    opacity: 1;
   }
 }
 
@@ -139,8 +138,8 @@
 }
 
 .splide__pagination__page {
-  width: 12px;
-  height: 12px;
+  width: 24px;
+  height: 24px;
   border: 2px solid var(--foreground);
   border-radius: 0;
   background: transparent;

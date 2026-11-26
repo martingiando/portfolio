@@ -1,83 +1,53 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: #0055FF;
-  --color-accent-foreground: #ffffff;
-  --color-dark-navy: #111111;
-  --color-footer-bg: #111827;
-
   --font-sans: var(--font-inter);
-  --font-display: var(--font-syne);
   --font-mono: var(--font-jetbrains);
-
-  --shadow-brutalist: 8px 8px 0px 0px #111111;
-  --shadow-brutalist-sm: 4px 4px 0px 0px #111111;
-
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
 }
 
+/* An editor at play: ink and snow grounds, electric blue as the selection colour,
+   sky for the italic voice, mint for anything live (caret, status). */
 :root {
-  --radius: 0.625rem;
-  --background: #F7F7F8;
-  --foreground: #0A0E17;
-  --card: #ffffff;
-  --card-foreground: #0A0E17;
-  --popover: #ffffff;
-  --popover-foreground: #0A0E17;
-  --primary: #0A0E17;
-  --primary-foreground: #F7F7F8;
-  --secondary: #E8E8EA;
-  --secondary-foreground: #0A0E17;
-  --muted: #E8E8EA;
-  --muted-foreground: #6B7280;
-  --accent: #0055FF;
-  --accent-foreground: #ffffff;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: #D1D5DB;
-  --input: #D1D5DB;
-  --ring: #0055FF;
+  --ink: #0e0f13;
+  --ink-soft: #b3b8c4;
+  --snow: #eef0f5;
+  --snow-soft: #4a4f5c;
+  --blue: #2448ff;
+  --sky: #9db4ff;
+  --mint: #3ddc97;
+  --navy: #0d1a66;
+  --danger: #b42323;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  background: var(--ink);
+  color-scheme: dark;
+  scrollbar-color: var(--blue) var(--ink);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring;
-  }
   body {
-    @apply bg-background text-foreground;
+    background: var(--ink);
+    color: var(--snow);
+  }
+  ::selection {
+    background: var(--blue);
+    color: var(--snow);
   }
   :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 3px solid var(--sky);
+    outline-offset: 4px;
   }
-  footer :focus-visible {
-    outline-color: white;
+  .on-light {
+    color-scheme: light;
+  }
+  .on-light :focus-visible {
+    outline-color: var(--ink);
+  }
+  .on-blue :focus-visible {
+    outline-color: var(--snow);
+  }
+  section[id] {
+    scroll-margin-top: 4rem;
   }
   /* Long words wrap instead of being cut off when text is enlarged */
   h1,
@@ -89,64 +59,319 @@
   p {
     text-wrap: pretty;
   }
-  ::selection {
-    background: var(--accent);
-    color: white;
-  }
-  ::placeholder {
-    color: var(--muted-foreground);
-    opacity: 1;
-  }
 }
 
-/* Skip to content link */
 .skip-to-content {
   position: absolute;
   left: -9999px;
   top: 0;
   z-index: 100;
-  padding: 0.5rem 1rem;
-  background: var(--accent);
-  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 1rem 0;
+  background: var(--blue);
+  color: var(--snow);
   font-weight: 600;
 }
 .skip-to-content:focus {
   left: 0;
 }
 
-/* Splide — prevent shadow clipping from overflow:hidden */
-.splide__track {
-  overflow: visible !important;
+/* In the components layer so Tailwind utilities can still adjust these per use */
+@layer components {
+/* Form fields: white wells on the snow card, blue caret and ring */
+.mg-field {
+  width: 100%;
+  border-radius: 1rem;
+  background: #fff;
+  color: var(--ink);
+  caret-color: var(--blue);
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  box-shadow: inset 0 0 0 1.5px rgb(14 15 19 / 0.18);
+  transition: box-shadow 0.2s;
+}
+.mg-field::placeholder {
+  color: #676c7a;
+  opacity: 1;
+}
+.mg-field:hover {
+  box-shadow: inset 0 0 0 1.5px rgb(14 15 19 / 0.4);
+}
+.mg-field:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 
-.splide {
-  overflow: hidden;
-  padding-right: 8px;
-  padding-bottom: 8px;
-}
+  /* Type voices */
+  .mg-display {
+    font-family: var(--font-anybody), system-ui, sans-serif;
+    font-weight: 900;
+    font-variation-settings: "wdth" 112;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+  }
+  .mg-serif {
+    font-family: var(--font-bodoni), Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-variation-settings: normal;
+    text-transform: none;
+    letter-spacing: -0.03em;
+  }
+  .mg-mono {
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+  }
 
-/* Splide pagination dots — brutalist style */
-.splide__pagination {
-  position: relative !important;
-  bottom: auto !important;
-  margin-top: 2rem;
-  gap: 0.5rem;
-  display: flex;
-  justify-content: center;
-  z-index: 10;
-  margin-top: 1rem !important;
-}
+  /* Rest width of the cursor-reactive lines; letters widen from here */
+  .mg-stretch {
+    font-variation-settings: "wdth" 96;
+  }
 
-.splide__pagination__page {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--foreground);
-  border-radius: 0;
-  background: transparent;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
+  /* Text that looks selected in an editor, with the caret parked at its end */
+  .mg-select {
+    color: var(--snow);
+    padding: 0.06em 0.12em 0;
+    background: linear-gradient(var(--blue), var(--blue)) no-repeat left / 100% 100%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .mg-caret {
+    display: inline-block;
+    width: 0.07em;
+    height: 0.8em;
+    margin-left: 0.05em;
+    vertical-align: -0.02em;
+    background: var(--mint);
+  }
+  @keyframes mg-blink {
+    50% { opacity: 0; }
+  }
+  @keyframes mg-select-in {
+    from { background-size: 0% 100%; }
+  }
 
-.splide__pagination__page.is-active {
-  background: var(--foreground);
+  /* Live status */
+  .mg-live {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: var(--mint);
+  }
+  @keyframes mg-ping {
+    to { box-shadow: 0 0 0 0.6rem transparent; }
+  }
+
+  /* Masked line reveal: visible by default, hidden only once JS has armed it */
+  .mg-line {
+    display: block;
+    /* Masks top and bottom only, so stretched letters never get cut at the sides */
+    clip-path: inset(0 -100vw);
+    padding-block: 0.1em;
+    margin-block: -0.1em;
+  }
+  .mg-line > span {
+    display: inline-block;
+    transition: transform 1s var(--ease-out) calc(var(--i, 0) * 90ms);
+  }
+  [data-reveal="pending"] .mg-line > span {
+    transform: translateY(115%) rotate(3deg);
+    transition: none;
+  }
+
+  /* Pills */
+  .mg-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    border-radius: 999px;
+    padding: 1em 1.6em;
+    font-family: var(--font-anybody), system-ui, sans-serif;
+    font-weight: 800;
+    font-variation-settings: "wdth" 115;
+    font-size: 0.85rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition:
+      transform 0.4s var(--ease-out),
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .mg-pill:hover {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+  .mg-pill:active {
+    transform: scale(0.96);
+  }
+
+  /* Bands */
+  .mg-band {
+    position: relative;
+    z-index: 2;
+    margin-inline: -3vw;
+    transform: rotate(-2deg);
+  }
+
+  /* Project tiles */
+  .mg-tile {
+    transition: transform 0.6s var(--ease-out);
+  }
+  .mg-tile img,
+  .mg-tile video {
+    transition:
+      transform 0.8s var(--ease-out),
+      opacity 0.3s;
+  }
+  a.mg-tile:hover {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+  a.mg-tile:hover img,
+  a.mg-tile:hover video {
+    transform: scale(1.05);
+  }
+
+  /* Stack chips */
+  .mg-chip {
+    cursor: grab;
+    touch-action: manipulation;
+    user-select: none;
+    border-radius: 999px;
+    padding: 0.55em 1.05em 0.5em;
+    font-family: var(--font-anybody), system-ui, sans-serif;
+    font-weight: 800;
+    font-variation-settings: "wdth" 118;
+    font-size: clamp(0.95rem, 1.7vw, 1.45rem);
+    line-height: 1;
+    text-transform: uppercase;
+    box-shadow: 0 10px 22px -12px rgb(0 0 0 / 0.55);
+  }
+  .mg-chip:active {
+    cursor: grabbing;
+  }
+  .tone-mint { background: var(--mint); color: var(--ink); }
+  .tone-sky { background: var(--sky); color: var(--ink); }
+  .tone-snow { background: var(--snow); color: var(--ink); }
+  .tone-ink { background: var(--ink); color: var(--snow); }
+  /* The sky ring keeps navy apart from ink on the blue ground */
+  .tone-navy { background: var(--navy); color: var(--snow); box-shadow: inset 0 0 0 2px var(--sky), 0 10px 22px -12px rgb(0 0 0 / 0.55); }
+  .tone-outline { background: transparent; color: var(--snow); box-shadow: inset 0 0 0 2px var(--snow); }
+
+  /* Cursor: an I-beam caret that inverts what it crosses, blinks when you stop,
+     and opens into a labelled disc over anything you can act on */
+  .mg-cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    width: 3px;
+    height: 30px;
+    margin: -15px 0 0 -1.5px;
+    display: grid;
+    place-items: center;
+    border-radius: 2px;
+    background: var(--snow);
+    mix-blend-mode: difference;
+    pointer-events: none;
+    transition:
+      width 0.35s var(--ease-out),
+      height 0.35s var(--ease-out),
+      margin 0.35s var(--ease-out),
+      border-radius 0.35s var(--ease-out),
+      opacity 0.2s;
+  }
+  .mg-cursor::before,
+  .mg-cursor::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 11px;
+    height: 3px;
+    margin-left: -5.5px;
+    border-radius: 2px;
+    background: inherit;
+    transition: opacity 0.15s;
+  }
+  .mg-cursor::before { top: 0; }
+  .mg-cursor::after { bottom: 0; }
+  .mg-cursor:is([data-mode="hover"], [data-mode="label"])::before,
+  .mg-cursor:is([data-mode="hover"], [data-mode="label"])::after {
+    opacity: 0;
+  }
+  .mg-cursor[data-mode="hover"] {
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    border-radius: 999px;
+  }
+  .mg-cursor[data-mode="label"] {
+    width: 92px;
+    height: 92px;
+    margin: -46px 0 0 -46px;
+    border-radius: 999px;
+    mix-blend-mode: normal;
+    background: var(--blue);
+    box-shadow: 0 0 0 2px var(--snow);
+  }
+  .mg-cursor > span {
+    font: 800 0.72rem/1 var(--font-anybody), system-ui, sans-serif;
+    font-variation-settings: "wdth" 120;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--snow);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .mg-cursor[data-mode="label"] > span {
+    opacity: 1;
+  }
+  .mg-cursor[data-hidden] {
+    opacity: 0;
+  }
+
+  /* Colour blocks open up as they scroll in (where supported) */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .mg-grow {
+        animation: mg-grow linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 70%;
+      }
+      @keyframes mg-grow {
+        from { clip-path: inset(4% 5% 0 5% round 3rem); }
+        to { clip-path: inset(0 0 0 0 round 0); }
+      }
+    }
+  }
+
+  /* Hero entrance: runs on first paint, so the headline never blinks after hydration */
+  @keyframes mg-rise {
+    from { transform: translateY(115%) rotate(3deg); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mg-intro .mg-line > span {
+      animation: mg-rise 1.1s var(--ease-out) both;
+      animation-delay: calc(0.15s + var(--i, 0) * 110ms);
+    }
+    /* "TO BACK." gets selected like shift+end once the lines land */
+    .mg-intro .mg-select {
+      animation: mg-select-in 0.6s cubic-bezier(0.65, 0, 0.35, 1) 1.15s both;
+    }
+    .mg-caret,
+    .mg-cursor[data-idle] {
+      animation: mg-blink 1.06s steps(1) infinite;
+    }
+    .mg-live {
+      box-shadow: 0 0 0 0 rgb(61 220 151 / 0.6);
+      animation: mg-ping 1.8s var(--ease-out) infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mg-line > span { transition: none; }
+    .mg-pill:hover,
+    a.mg-tile:hover,
+    a.mg-tile:hover img { transform: none; }
+  }
 }

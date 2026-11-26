@@ -1,12 +1,17 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { Fragment, useState, type FormEvent } from "react";
 import { SITE_CONFIG, SOCIAL_LINKS } from "@/lib/constants";
-import { AnimatedSection } from "@/components/shared/animated-section";
-import { textLink } from "@/components/shared/page-shell";
-import { SectionHeading } from "@/components/shared/section-heading";
+import { CopyEmail } from "@/components/shared/copy-email";
+import { Arrow } from "@/components/shared/icons";
+import { section, wrap } from "@/components/shared/page-shell";
+import { Reveal } from "@/components/shared/reveal";
+import { StretchType } from "@/components/shared/stretch-type";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
+
+const ringPill = "mg-pill ring-2 ring-(--snow)/40 ring-inset hover:bg-(--snow) hover:text-(--ink)";
+const label = "mb-2 block text-sm font-semibold";
 
 export function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -41,185 +46,141 @@ export function Contact() {
       setStatus("success");
       form.reset();
     } catch (err) {
-      setErrorMsg(
-        err instanceof Error ? err.message : "Something went wrong."
-      );
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
       setStatus("error");
     }
   }
 
   return (
-    <section
-      id="contact"
-      className="px-6 py-24"
-      aria-labelledby="contact-heading"
-    >
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading id="contact-heading" title="Get In Touch" />
+    <section id="contact" className={`bg-(--ink) ${section}`}>
+      <div className={`${wrap} grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,30rem)] lg:items-end lg:gap-16`}>
+        <div>
+          <Reveal
+            className="mg-display text-[clamp(2.7rem,6.6vw,7rem)]"
+            lines={[
+              <StretchType key="role" text="Got a role" />,
+              <Fragment key="l2">
+                <span className="mg-serif text-(--sky)">or a</span> project?
+              </Fragment>,
+            ]}
+          />
+          <p className="mt-8 max-w-[44ch] text-lg leading-relaxed text-(--ink-soft)">
+            Full-time or freelance, remote from Buenos Aires (UTC−3). Copy my email, or leave a message here. I
+            usually reply within 24 hours.
+          </p>
+          <div className="mt-8 max-w-3xl">
+            <CopyEmail email={SITE_CONFIG.email} />
+          </div>
+          <ul className="mt-6 flex flex-wrap gap-3">
+            <li>
+              <a href={`mailto:${SITE_CONFIG.email}`} className={ringPill}>
+                Write an email <Arrow />
+              </a>
+            </li>
+            {SOCIAL_LINKS.map((link) => (
+              <li key={link.label}>
+                <a href={link.href} target="_blank" rel="me noopener noreferrer" className={ringPill}>
+                  {link.label} <Arrow />
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href={SITE_CONFIG.cv} download className={ringPill}>
+                CV (PDF)
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left: CTA text */}
-          <AnimatedSection>
-            <p className="text-muted-foreground text-lg leading-relaxed max-w-md mb-8">
-              Have a role, a project idea or a question? Send me a message, or
-              write to me directly.
-            </p>
-            <ul className="mb-8 flex flex-col items-start">
-              <li>
-                <a
-                  href={`mailto:${SITE_CONFIG.email}`}
-                  className={`${textLink} inline-block py-2.5`}
-                >
-                  {SITE_CONFIG.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={SITE_CONFIG.cv}
-                  download
-                  className={`${textLink} inline-block py-2.5`}
-                >
-                  Download CV (PDF)
-                </a>
-              </li>
-              {SOCIAL_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${textLink} inline-block py-2.5`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <div className="flex items-center gap-4">
-              <span className="h-px w-12 bg-accent" aria-hidden="true" />
-              <span className="font-mono text-xs uppercase tracking-widest text-accent">
-                Usually replies within 24h
-              </span>
+        <div className="on-light rounded-[2rem] bg-(--snow) p-6 text-(--ink) md:p-8">
+          {status === "success" ? (
+            <div
+              role="status"
+              tabIndex={-1}
+              ref={(el) => el?.focus()}
+              className="flex min-h-[26rem] flex-col items-start justify-center gap-4"
+            >
+              <p className="mg-display text-[clamp(2.2rem,4vw,3.2rem)]">Message sent.</p>
+              <p className="leading-relaxed text-(--snow-soft)">
+                Thanks for reaching out! I&apos;ll get back to you soon.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStatus("idle")}
+                className="mg-pill mt-2 ring-2 ring-(--ink)/30 ring-inset hover:bg-(--ink) hover:text-(--snow)"
+              >
+                Send another message
+              </button>
             </div>
-          </AnimatedSection>
-
-          {/* Right: Form */}
-          <AnimatedSection delay={0.15}>
-            {status === "success" ? (
-              <div
-                role="status"
-                tabIndex={-1}
-                ref={(el) => el?.focus()}
-                className="border border-foreground shadow-brutalist bg-card p-8 md:p-10 text-center"
-              >
-                <p className="font-display text-2xl font-bold uppercase tracking-tight mb-2">
-                  Message Sent
-                </p>
-                <p className="text-muted-foreground">
-                  Thanks for reaching out! I&apos;ll get back to you soon.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setStatus("idle")}
-                  className="mt-6 py-3 font-mono text-sm text-accent uppercase tracking-wider hover:underline cursor-pointer"
-                >
-                  Send another message
-                </button>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <h3 className="mg-display text-[clamp(1.6rem,2.4vw,2rem)]">Send a message</h3>
+              <div>
+                <label htmlFor="name" className={label}>
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  maxLength={100}
+                  required
+                  className="mg-field"
+                  placeholder="Your name"
+                />
               </div>
-            ) : (
-              <form
-                onSubmit={handleSubmit}
-                className="border border-foreground shadow-brutalist bg-card p-6 md:p-8 flex flex-col gap-5"
+              <div>
+                <label htmlFor="email" className={label}>
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  maxLength={254}
+                  required
+                  className="mg-field"
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className={label}>
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  maxLength={5000}
+                  rows={5}
+                  className="mg-field resize-none"
+                  placeholder="Tell me about the role or project"
+                />
+              </div>
+
+              {/* Honeypot: people never see it, bots fill it in */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+              </div>
+
+              {status === "error" && (
+                <p className="text-sm font-semibold text-(--danger)" role="alert">
+                  {errorMsg}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="mg-pill w-full justify-center bg-(--blue) text-(--snow) hover:transform-none disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block font-mono text-xs uppercase tracking-wider text-muted-foreground mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    maxLength={100}
-                    required
-                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                    placeholder="Your name"
-                  />
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block font-mono text-xs uppercase tracking-wider text-muted-foreground mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    maxLength={254}
-                    required
-                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-base focus:outline-none focus:ring-2 focus:ring-accent"
-                    placeholder="you@example.com"
-                  />
-                </div>
-
-                {/* Message */}
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block font-mono text-xs uppercase tracking-wider text-muted-foreground mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    maxLength={5000}
-                    rows={5}
-                    className="w-full border border-foreground bg-background px-4 py-3 font-sans text-base resize-none focus:outline-none focus:ring-2 focus:ring-accent"
-                    placeholder="Tell me about the role or project"
-                  />
-                </div>
-
-                {/* Honeypot: people never see it, bots fill it in */}
-                <div className="hidden" aria-hidden="true">
-                  <label htmlFor="website">Website</label>
-                  <input
-                    id="website"
-                    name="website"
-                    type="text"
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                </div>
-
-                {/* Error message */}
-                {status === "error" && (
-                  <p className="font-mono text-sm text-destructive" role="alert">
-                    {errorMsg}
-                  </p>
-                )}
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="w-full bg-accent text-white px-6 py-3 font-mono text-sm uppercase tracking-wider font-medium shadow-brutalist-sm transition-all duration-200 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-                >
-                  {status === "sending" ? "Sending..." : "Send Message"}
-                </button>
-              </form>
-            )}
-          </AnimatedSection>
+                {status === "sending" ? "Sending…" : "Send message"} <Arrow />
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </section>

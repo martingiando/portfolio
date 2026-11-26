@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { syne, inter, jetbrainsMono } from "@/lib/fonts";
+import { anybody, bodoni, inter, jetbrainsMono } from "@/lib/fonts";
 import { SITE_CONFIG, SITE_URL } from "@/lib/constants";
 import { JsonLd, person } from "@/lib/json-ld";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { ScrollProgress } from "@/components/layout/scroll-progress";
+import { Cursor } from "@/components/shared/cursor";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${anybody.variable} ${bodoni.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-sans antialiased">
         <JsonLd
@@ -64,7 +64,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <SmoothScrollProvider>
-          <ScrollProgress />
+          <Cursor />
           <Navbar />
           <main id="main-content">{children}</main>
           <Footer />

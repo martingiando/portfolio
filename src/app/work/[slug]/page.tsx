@@ -49,7 +49,7 @@ export default async function CaseStudyPage(props: Props) {
     <PageShell title={title} lead={caseStudy.summary}>
       <div className="grid gap-12 lg:grid-cols-[30rem_1fr]">
         {/* 30rem: the source images are only 600-800px wide */}
-        <div className="relative aspect-4/3 max-w-[30rem] border border-foreground shadow-brutalist bg-muted overflow-hidden">
+        <div className="relative aspect-4/3 max-w-[30rem] overflow-hidden rounded-[2rem] bg-(--ink)/5">
           <Image
             src={image}
             alt={alt ?? title}
@@ -61,7 +61,7 @@ export default async function CaseStudyPage(props: Props) {
         </div>
 
         <PageSection title="What I built">
-          <ul className="max-w-[58ch] list-disc pl-5 flex flex-col gap-3 text-lg leading-relaxed">
+          <ul className="flex max-w-[58ch] list-disc flex-col gap-3 pl-5 text-lg leading-relaxed marker:text-(--blue)">
             {caseStudy.highlights.map((highlight) => (
               <li key={highlight}>{highlight}</li>
             ))}

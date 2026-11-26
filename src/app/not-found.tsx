@@ -1,23 +1,22 @@
 import Link from "next/link";
+import { Arrow } from "@/components/shared/icons";
+import { StretchType } from "@/components/shared/stretch-type";
 
 export default function NotFound() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
-      <p className="font-mono text-sm uppercase tracking-widest text-accent mb-4">
-        404
-      </p>
-      <h1 className="font-display text-[clamp(2rem,6vw,5rem)] font-bold uppercase tracking-tight leading-[1.1] mb-6">
-        Page Not Found
-      </h1>
-      <p className="text-muted-foreground text-lg mb-10 max-w-md">
-        The page you&apos;re looking for doesn&apos;t exist or has been moved.
-      </p>
-      <Link
-        href="/"
-        className="inline-block bg-accent text-white px-8 py-3 font-mono text-sm uppercase tracking-wider font-medium shadow-brutalist-sm transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-      >
-        Back to Home
-      </Link>
+    <section className="flex min-h-svh flex-col justify-center px-5 pt-28 pb-20 md:px-10">
+      <div className="mx-auto w-full max-w-[90rem]">
+        <h1 className="mg-display text-[clamp(3rem,11vw,10rem)]">
+          <StretchType text="Page not found" />
+          <span className="mg-caret" aria-hidden="true" />
+        </h1>
+        <p className="mt-8 max-w-[44ch] text-lg leading-relaxed text-(--ink-soft)">
+          Error 404. The page you&apos;re looking for doesn&apos;t exist or has been moved.
+        </p>
+        <Link href="/" className="mg-pill mt-10 bg-(--blue) text-(--snow)">
+          Back to home <Arrow />
+        </Link>
+      </div>
     </section>
   );
 }

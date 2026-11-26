@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "files": [
+          "src/app/api/contact/route.ts"
+        ],
+        "createdAt": "2026-11-24T18:08:47.586Z",
+        "reason": "agent: HTML email template, email clients need web-safe fonts; line predates this work (HEAD route.ts:94)"
+      }
+    ]
+  }
+}

@@ -1,47 +1,30 @@
-"use client";
-
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/react-splide/css/core";
+import { Fragment } from "react";
 import { testimonials } from "@/data/testimonials";
-import { SectionHeading } from "@/components/shared/section-heading";
 import { TestimonialCard } from "@/components/cards/testimonial-card";
+import { section, wrap } from "@/components/shared/page-shell";
+import { Reveal } from "@/components/shared/reveal";
 
 export function Testimonials() {
   return (
-    <section
-      id="testimonials"
-      className="px-6 py-24"
-      aria-labelledby="testimonials-heading"
-    >
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          id="testimonials-heading"
-          title="What People Say"
-          count={`0${testimonials.length}`}
+    <section id="testimonials" className={`mg-grow on-light bg-(--sky) text-(--ink) ${section}`}>
+      <div className={wrap}>
+        <Reveal
+          className="mg-display text-[clamp(2.6rem,6.4vw,6.5rem)]"
+          lines={[
+            "Don't take",
+            <Fragment key="l2">
+              <span className="mg-serif text-(--navy)">my word</span> for it.
+            </Fragment>,
+          ]}
         />
-        {/* Splide keeps the list hidden until it mounts */}
-        <noscript>
-          <style>{`.splide{visibility:visible!important}.splide__list{flex-direction:column;gap:1.5rem}`}</style>
-        </noscript>
-        <Splide
-          options={{
-            perPage: 3,
-            gap: "1.5rem",
-            pagination: true,
-            arrows: false,
-            breakpoints: {
-              1024: { perPage: 2, gap: "1.25rem" },
-              768: { perPage: 1, gap: "1rem" },
-            },
-          }}
-          aria-label="Testimonials"
-        >
+        {/* Columns, not a carousel: every review is readable without clicking through */}
+        <ul className="mt-14 gap-x-14 md:columns-2">
           {testimonials.map((testimonial) => (
-            <SplideSlide key={testimonial.id}>
+            <li key={testimonial.id} className="mb-12 break-inside-avoid">
               <TestimonialCard testimonial={testimonial} />
-            </SplideSlide>
+            </li>
           ))}
-        </Splide>
+        </ul>
       </div>
     </section>
   );

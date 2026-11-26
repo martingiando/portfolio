@@ -1,45 +1,89 @@
-import Link from "next/link";
+import { Fragment } from "react";
 import { SITE_CONFIG } from "@/lib/constants";
+import { Arrow } from "@/components/shared/icons";
+import { LocalTime } from "@/components/shared/local-time";
+import { Band } from "@/components/shared/marquee";
+import { wrap } from "@/components/shared/page-shell";
+import { Reveal } from "@/components/shared/reveal";
+import { StretchType } from "@/components/shared/stretch-type";
 
 export function Hero() {
   return (
-    <section
-      className="min-h-svh flex flex-col px-6 pt-28 pb-12"
-      aria-label="Introduction"
-    >
-      {/* Transform only: the content is visible before (and without) JS */}
-      <div className="mx-auto w-full max-w-7xl flex flex-col justify-between gap-10 flex-1 animate-in slide-in-from-bottom-6 duration-700 ease-out motion-reduce:animate-none">
-        <h1 className="my-auto font-display font-bold">
-          <span className="block text-[clamp(min(3rem,16vw),10vw,8rem)] uppercase tracking-[-0.02em] leading-[0.9]">
-            Martín <br />
-            Giando
-          </span>{" "}
-          <span className="block mt-6 text-[clamp(1.125rem,2.4vw,2rem)] leading-tight text-accent">
-            {SITE_CONFIG.role}
-          </span>
-        </h1>
-
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
-          <p className="max-w-xl text-lg text-muted-foreground leading-relaxed">
+    <section aria-label="Introduction" className="relative flex min-h-svh flex-col overflow-x-clip pt-16">
+      <div
+        className={`${wrap} grid flex-1 items-center gap-x-14 gap-y-8 px-5 pt-10 pb-14 sm:gap-y-10 sm:pt-16 sm:pb-20 md:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,23rem)]`}
+      >
+        {/* Sized to its column so the name stays on one line from sm up */}
+        <div className="@container">
+          <Reveal
+            as="h1"
+            className="mg-display mg-intro text-[17cqi] sm:text-[clamp(2.75rem,11cqi,9rem)]"
+            lines={[
+              <span key="name" className="sm:whitespace-nowrap">
+                <StretchType text="Martín Giando" />
+              </span>,
+              <Fragment key="l1">
+                <span className="mg-serif text-[0.6em] text-(--sky)">builds the web,</span> front
+              </Fragment>,
+              <span key="mark" className="mg-select">
+                <StretchType text="to back." />
+                <span className="mg-caret" aria-hidden="true" />
+              </span>,
+            ]}
+          />
+        </div>
+        <div className="flex flex-col">
+          <ul
+            aria-label="Availability"
+            className="mb-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-(--ink-soft) sm:mb-7"
+          >
+            <li className="flex items-center gap-2.5 font-semibold text-(--snow)">
+              <span className="mg-live" aria-hidden="true" />
+              Open to work
+            </li>
+            <li>
+              <span className="text-(--snow)">
+                <LocalTime />
+              </span>{" "}
+              in Buenos Aires
+            </li>
+            <li>Replies within 24h</li>
+          </ul>
+          <p className="text-[clamp(1.3rem,1.9vw,1.65rem)] leading-snug font-medium text-balance">
+            {SITE_CONFIG.role}.{" "}
+            <span className="mg-serif text-(--sky)">Deepest in frontend, and the backend is mine too.</span>
+          </p>
+          {/* On phones the CTAs come before the tagline so both fit the first screen */}
+          <p className="order-last mt-6 max-w-[42ch] leading-relaxed text-(--ink-soft) sm:order-none sm:mt-5">
             {SITE_CONFIG.tagline}
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/#work"
-              className="inline-block bg-accent text-white px-8 py-3 font-mono text-sm uppercase tracking-wider font-medium shadow-brutalist-sm transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-            >
-              See my work
-            </Link>
+          <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
+            <a href="#work" className="mg-pill bg-(--blue) text-(--snow)">
+              See the work <Arrow />
+            </a>
             <a
               href={SITE_CONFIG.cv}
               download
-              className="inline-block border border-foreground bg-card px-8 py-3 font-mono text-sm uppercase tracking-wider font-medium shadow-brutalist-sm transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+              className="mg-pill text-(--snow) ring-2 ring-(--snow)/40 ring-inset hover:bg-(--snow) hover:text-(--ink)"
             >
               Download CV
             </a>
           </div>
         </div>
       </div>
+
+      <Band
+        className="bg-(--blue) text-(--snow)"
+        words={[
+          ["Open to full-time"],
+          ["freelance", "and"],
+          ["React"],
+          ["Next.js"],
+          ["TypeScript"],
+          ["Node.js"],
+          ["Buenos Aires", "remote from"],
+        ]}
+      />
     </section>
   );
 }

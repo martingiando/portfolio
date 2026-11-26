@@ -1,6 +1,6 @@
 # Martín Giando — Portfolio
 
-A personal portfolio built with a bold, brutalist aesthetic. Showcases projects, experience, and a contact form — all crafted with modern web tech.
+A personal portfolio you can play with: the type stretches toward your cursor, the stack is a pile of chips you can throw, and colour blocks open up as you scroll. Showcases projects, experience, colleague reviews and a contact form.
 
 **[→ View Live](https://martingiando.vercel.app)**
 
@@ -12,9 +12,9 @@ A personal portfolio built with a bold, brutalist aesthetic. Showcases projects,
 |----------|--------------|
 | **Framework** | Next.js 16, React 19 |
 | **Language** | TypeScript |
-| **Styling** | Tailwind CSS 4, tw-animate-css |
-| **UI** | shadcn, Framer Motion |
-| **Features** | Lenis (smooth scroll), Splide (carousel), Resend (contact form) |
+| **Styling** | Tailwind CSS 4, variable fonts (Anybody, Bodoni Moda) |
+| **UI** | Framer Motion |
+| **Features** | Lenis (smooth scroll), Resend (contact form) |
 
 ---
 
@@ -26,7 +26,7 @@ A personal portfolio built with a bold, brutalist aesthetic. Showcases projects,
 - **Testimonials** — Colleague quotes
 - **Contact** — Form powered by Resend, email and downloadable CV
 - **Pages** — About, Hire me and a Spanish profile, with structured data
-- **Design** — Brutalist layout, scroll progress bar, smooth scrolling
+- **Design** — Cursor-reactive variable type, a caret cursor, throwable stack chips, scroll-driven colour blocks and marquees
 
 ---
 

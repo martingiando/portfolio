@@ -1,35 +1,31 @@
 import type { Testimonial } from "@/data/testimonials";
 
-interface TestimonialCardProps {
-  testimonial: Testimonial;
-}
+/** A review with its key phrase marked like text selected in an editor. Takes its colours from the surface it sits on. */
+export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+  const { quote, highlight } = testimonial;
+  const at = highlight ? quote.indexOf(highlight) : -1;
 
-export function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <blockquote className="border border-foreground shadow-brutalist bg-card flex flex-col h-full">
-      {/* Quote */}
-      <div className="px-6 py-6 md:px-8 md:py-8 flex-1">
-        <span
-          className="block font-display text-4xl text-accent leading-none mb-4 select-none"
-          aria-hidden="true"
-        >
-          &ldquo;
-        </span>
-        <p className="text-foreground leading-relaxed">{testimonial.quote}</p>
-      </div>
-
-      {/* Separator */}
-      <div className="border-t border-foreground" />
-
-      {/* Attribution */}
-      <div className="px-6 py-4 md:px-8">
-        <p className="font-display text-sm font-bold uppercase tracking-tight">
-          {testimonial.name}
+    <figure className="flex h-full flex-col gap-5 border-t-2 border-current/20 pt-6">
+      <blockquote className="text-lg leading-relaxed">
+        <p>
+          {at < 0 || !highlight ? (
+            quote
+          ) : (
+            <>
+              {quote.slice(0, at)}
+              <mark className="mg-select">{highlight}</mark>
+              {quote.slice(at + highlight.length)}
+            </>
+          )}
         </p>
-        <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
+      </blockquote>
+      <figcaption className="mt-auto">
+        <p className="font-semibold">{testimonial.name}</p>
+        <p className="mt-0.5 text-sm opacity-75">
           {testimonial.role}, {testimonial.company}
         </p>
-      </div>
-    </blockquote>
+      </figcaption>
+    </figure>
   );
 }

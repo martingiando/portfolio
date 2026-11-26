@@ -1,9 +1,19 @@
-import { Syne, Inter, JetBrains_Mono } from "next/font/google";
+import { Anybody, Bodoni_Moda, Inter, JetBrains_Mono } from "next/font/google";
 
-export const syne = Syne({
+// Display voice; its width axis is what the cursor stretches
+export const anybody = Anybody({
   subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-syne",
+  axes: ["wdth"],
+  variable: "--font-anybody",
+  display: "swap",
+});
+
+// Italic accent voice
+export const bodoni = Bodoni_Moda({
+  subsets: ["latin"],
+  style: ["italic"],
+  axes: ["opsz"],
+  variable: "--font-bodoni",
   display: "swap",
 });
 

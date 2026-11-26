@@ -48,7 +48,7 @@ export function About() {
               alt={`Photo of ${SITE_CONFIG.name}`}
               fill
               sizes="(max-width: 1024px) 22rem, 24rem"
-              className="object-cover object-[64%_center]"
+              className="object-cover"
             />
           </div>
           <figcaption className="px-2 pt-3 pb-1 text-sm font-semibold text-(--snow)">

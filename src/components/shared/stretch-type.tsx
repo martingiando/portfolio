@@ -17,6 +17,7 @@ export function StretchType({ text }: { text: string }) {
     const root = ref.current;
     if (!root || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const letters = [...root.querySelectorAll<HTMLElement>("[data-l]")];
+    const words = [...root.querySelectorAll<HTMLElement>("[data-w]")];
     const now = letters.map(() => ({ w: REST, g: 900 }));
     let px = -1e5;
     let py = -1e5;
@@ -28,6 +29,14 @@ export function StretchType({ text }: { text: string }) {
     // shortcut: re-measured on resize only, so a resize mid-stretch keeps slightly off centres until the next resize.
     let centres: { x: number; y: number }[] = [];
     const measure = () => {
+      // Pin the rest line breaks: stretched letters change the line width, and a free
+      // reflow (two lines into one) moved every letter out from under the cursor.
+      root.removeAttribute("data-locked");
+      words.forEach((w) => w.parentElement!.removeAttribute("data-br"));
+      words.forEach((w, i) => {
+        if (i > 0 && w.offsetTop > words[i - 1].offsetTop) w.parentElement!.setAttribute("data-br", "");
+      });
+      root.setAttribute("data-locked", "");
       centres = letters.map((el) => ({
         x: el.offsetLeft + el.offsetWidth / 2 - root.offsetLeft,
         y: el.offsetTop + el.offsetHeight / 2 - root.offsetTop,
@@ -101,7 +110,7 @@ export function StretchType({ text }: { text: string }) {
         {text.split(" ").map((word, w) => (
           <span key={w}>
             {w > 0 && " "}
-            <span className="inline-block whitespace-nowrap">
+            <span data-w="" className="inline-block whitespace-nowrap">
               {[...word].map((ch, i) => (
                 <span key={i} data-l="" className="inline-block">
                   {ch}

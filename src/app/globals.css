@@ -127,6 +127,14 @@
   .mg-stretch {
     font-variation-settings: "wdth" 96;
   }
+  /* StretchType pins its rest line breaks so stretching never rewraps the title */
+  .mg-stretch[data-locked] > [aria-hidden] {
+    white-space: nowrap;
+  }
+  .mg-stretch [data-br]::before {
+    content: "\A";
+    white-space: pre;
+  }
 
   /* Text that looks selected in an editor, with the caret parked at its end */
   .mg-select {
@@ -374,4 +382,11 @@
     a.mg-tile:hover,
     a.mg-tile:hover img { transform: none; }
   }
+}
+
+/* The caret replaces the system pointer while it follows a mouse. Unlayered and
+   important so no component or utility cursor (grab, pointer) shows through. */
+html[data-own-cursor],
+html[data-own-cursor] * {
+  cursor: none !important;
 }

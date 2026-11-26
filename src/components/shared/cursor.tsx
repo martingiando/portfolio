@@ -42,6 +42,7 @@ export function Cursor() {
         cx = x;
         cy = y;
         el.removeAttribute("data-hidden");
+        document.documentElement.setAttribute("data-own-cursor", "");
         raf = requestAnimationFrame(tick);
       }
     };
@@ -49,6 +50,7 @@ export function Cursor() {
       cancelAnimationFrame(raf);
       raf = 0;
       el.setAttribute("data-hidden", "");
+      document.documentElement.removeAttribute("data-own-cursor");
     };
 
     window.addEventListener("pointermove", move, { passive: true });
